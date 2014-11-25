@@ -222,10 +222,7 @@ public class MyActivity extends Activity{
     public void expandFold(final FoldingLayout rootView){
 
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(rootView,
-                "foldFactor", rootView.getFoldFactor(), 0);
-        animator.setDuration(FOLD_ANIMATION_DURATION);
-        animator.setInterpolator(new AccelerateInterpolator());
+        ObjectAnimator animator = createFoldAnimator(rootView, rootView.getFoldFactor(), 0);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -237,11 +234,7 @@ public class MyActivity extends Activity{
     }
 
     public void collapseFold(final FoldingLayout rootView){
-        ObjectAnimator animator = ObjectAnimator.ofFloat(rootView,
-                "foldFactor", rootView.getFoldFactor(), 1.0f);
-        animator.setDuration(FOLD_ANIMATION_DURATION);
-        animator.setInterpolator(new AccelerateInterpolator());
-
+        ObjectAnimator animator = createFoldAnimator(rootView, rootView.getFoldFactor(), 1.0f);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -250,7 +243,27 @@ public class MyActivity extends Activity{
             }
         });
         animator.start();
+    }
 
+    public ObjectAnimator createFoldAnimator(final View rootView, float start, float end){
+        ObjectAnimator anim = ObjectAnimator.ofFloat(rootView, "foldFactor", start, end);
+        anim.setDuration(FOLD_ANIMATION_DURATION);
+        anim.setInterpolator(new AccelerateInterpolator());
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                int height = (Integer) valueAnimator.getAnimatedValue();
+//                rootView.getLayoutParams().height = height;
+//                rootView.requestLayout();
+
+                Float f = (Float) valueAnimator.getAnimatedValue();
+                Float result = 1.0f-f;
+                rootView.getLayoutParams().height = (int) (300*result);
+                rootView.requestLayout();
+            }
+        });
+
+        return anim;
     }
 
     public void expand(final View rootView){
