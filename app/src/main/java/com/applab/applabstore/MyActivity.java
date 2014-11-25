@@ -36,9 +36,10 @@ import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
 
-public class MyActivity extends Activity{
+public class MyActivity extends Activity {
 
     StResol stR;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,34 +49,34 @@ public class MyActivity extends Activity{
         listView.setAdapter(new MyAdapter());
 
         List<MyModel> list = new ArrayList<MyModel>();
-        for( int i = 0 ; i < 1 ; i++){
+        for (int i = 0; i < 1; i++) {
             list.add(new MyModel(R.drawable.ic_launcher, "Number " + i));
         }
 
-        ((MyAdapter)listView.getAdapter()).applyDataToList(list);
+        ((MyAdapter) listView.getAdapter()).applyDataToList(list);
 //        setContentView(listView);
         setContentView(new AppType(this));
     }
 
 
-    public class MyModel{
+    public class MyModel {
         public int imgResource;
         public String Name;
 
-        public MyModel(int res, String name){
+        public MyModel(int res, String name) {
             imgResource = res;
             Name = name;
         }
     }
 
-    public class MyAdapter extends BaseAdapter{
+    public class MyAdapter extends BaseAdapter {
         public List<MyModel> list;
 
-        public MyAdapter(){
+        public MyAdapter() {
             list = new ArrayList<MyModel>();
         }
 
-        public void applyDataToList(List<MyModel> dataToApply){
+        public void applyDataToList(List<MyModel> dataToApply) {
             list.addAll(dataToApply);
         }
 
@@ -97,20 +98,19 @@ public class MyActivity extends Activity{
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             AppType appView;
-            if( view == null ){
+            if (view == null) {
                 appView = new AppType(viewGroup.getContext());
-            }
-            else{
+            } else {
                 appView = (AppType) view;
             }
 
-            appView.setData((MyModel)getItem(i));
+            appView.setData((MyModel) getItem(i));
             return appView;
 
         }
     }
 
-    public class MyFoldingLayout extends FoldingLayout{
+    public class MyFoldingLayout extends FoldingLayout {
         public MyFoldingLayout(Context context) {
             super(context);
         }
@@ -122,7 +122,7 @@ public class MyActivity extends Activity{
         }
     }
 
-    public class AppType extends RelativeLayout{
+    public class AppType extends RelativeLayout {
         TextView mTitle;
         ImageView mImgOnLeft;
         MyFoldingLayout mFold;
@@ -136,22 +136,22 @@ public class MyActivity extends Activity{
             RelativeLayout rel = new RelativeLayout(context);
             rel.setId(stR.id++);
 
-            rel.addView(mImgOnLeft , stR.mUI.mLayout.relParam(100,100, null, new int[]{20,20,20,20}));
-            rel.addView(mTitle, stR.mUI.mLayout.relParam(-2,-2,new int[]{RIGHT_OF, mImgOnLeft.getId(), CENTER_VERTICAL}));
+            rel.addView(mImgOnLeft, stR.mUI.mLayout.relParam(100, 100, null, new int[]{20, 20, 20, 20}));
+            rel.addView(mTitle, stR.mUI.mLayout.relParam(-2, -2, new int[]{RIGHT_OF, mImgOnLeft.getId(), CENTER_VERTICAL}));
 
 
             rel.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     // where trigger animation
-                    if(mFold.getVisibility() == View.GONE){
-                        Log.i("LOG","expand");
+                    if (mFold.getVisibility() == View.GONE) {
+                        Log.i("LOG", "expand");
 //                        collapseFold(mFold);
 //                        expand(mFold);
                         expandFold(mFold);
 //                        animateFold(mFold, 1000);
-                    }else{
-                        Log.i("LOG","collapse");
+                    } else {
+                        Log.i("LOG", "collapse");
                         collapseFold(mFold);
 //                        collapse(mFold);
 //                        collapse(mFold);
@@ -201,25 +201,26 @@ public class MyActivity extends Activity{
             addView(img, stR.mUI.mLayout.relParam(-1, -2, new int[]{BELOW, mFold.getId()}));
         }
 
-        public void setData(MyModel model){
+        public void setData(MyModel model) {
 //            mImgOnLeft.setImageResource(model.imgResource);
             mTitle.setText(model.Name);
         }
     }
 
-    public class MyListView extends ListView{
+    public class MyListView extends ListView {
 
         public MyListView(Context context) {
             super(context);
 
             ArrayList<String> list = new ArrayList<String>();
-            list.addAll(Arrays.asList(new String[]{"One","Two","Three","Four","One","Two","Three","Four","One","Two","Three","Four"}));
+            list.addAll(Arrays.asList(new String[]{"One", "Two", "Three", "Four", "One", "Two", "Three", "Four", "One", "Two", "Three", "Four"}));
             setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, list));
         }
     }
 
     private final int FOLD_ANIMATION_DURATION = 1000;
-    public void expandFold(final FoldingLayout rootView){
+
+    public void expandFold(final FoldingLayout rootView) {
 
 
         ObjectAnimator animator = createFoldAnimator(rootView, rootView.getFoldFactor(), 0);
@@ -233,7 +234,7 @@ public class MyActivity extends Activity{
         animator.start();
     }
 
-    public void collapseFold(final FoldingLayout rootView){
+    public void collapseFold(final FoldingLayout rootView) {
         ObjectAnimator animator = createFoldAnimator(rootView, rootView.getFoldFactor(), 1.0f);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -245,7 +246,9 @@ public class MyActivity extends Activity{
         animator.start();
     }
 
-    public ObjectAnimator createFoldAnimator(final View rootView, float start, float end){
+    int count = 0;
+
+    public ObjectAnimator createFoldAnimator(final View rootView, float start, float end) {
         ObjectAnimator anim = ObjectAnimator.ofFloat(rootView, "foldFactor", start, end);
         anim.setDuration(FOLD_ANIMATION_DURATION);
         anim.setInterpolator(new AccelerateInterpolator());
@@ -256,23 +259,32 @@ public class MyActivity extends Activity{
 //                rootView.getLayoutParams().height = height;
 //                rootView.requestLayout();
 
-                Float f = (Float) valueAnimator.getAnimatedValue();
-                Float result = 1.0f-f;
-                rootView.getLayoutParams().height = (int) (300*result);
-                rootView.requestLayout();
+                count++;
+                if (count == 2) {
+                    count = 0;
+                    Float f = (Float) valueAnimator.getAnimatedValue();
+                    Float result = 1.0f - f;
+//                    ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) rootView.getLayoutParams();
+//                    param.bottomMargin = -(int) (300 * f);
+                    ViewGroup.LayoutParams param = rootView.getLayoutParams();
+                    param.height = (int) (300 * result);
+
+                    rootView.requestLayout();
+                }
+
             }
         });
 
         return anim;
     }
 
-    public void expand(final View rootView){
+    public void expand(final View rootView) {
         rootView.setVisibility(View.VISIBLE);
 
         final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
 
-        rootView.measure(widthSpec,heightSpec);
+        rootView.measure(widthSpec, heightSpec);
         ValueAnimator anim = createAnimator(rootView, 0, originHeight);
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -285,12 +297,13 @@ public class MyActivity extends Activity{
     }
 
     int originHeight = 0;
-    public void collapse(final View rootView){
-        if( originHeight == 0 ){
+
+    public void collapse(final View rootView) {
+        if (originHeight == 0) {
             originHeight = rootView.getHeight();
         }
 
-        ValueAnimator anim = createAnimator(rootView, originHeight, 0 );
+        ValueAnimator anim = createAnimator(rootView, originHeight, 0);
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
@@ -302,7 +315,7 @@ public class MyActivity extends Activity{
         anim.start();
     }
 
-    public ValueAnimator createAnimator(final View rootView, int start, int end){
+    public ValueAnimator createAnimator(final View rootView, int start, int end) {
         ValueAnimator anim = ValueAnimator.ofInt(start, end);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -362,7 +375,7 @@ public class MyActivity extends Activity{
      */
     public void animateFold(final FoldingLayout fold, int duration) {
         float foldFactor = fold.getFoldFactor();
-        Log.i("LOG","foldFactor = " + foldFactor);
+        Log.i("LOG", "foldFactor = " + foldFactor);
 
 //        ObjectAnimator animator = ObjectAnimator.ofFloat(fold,
 //                "foldFactor", foldFactor, 1);
@@ -393,7 +406,7 @@ public class MyActivity extends Activity{
 //
 //        animator.addListener(new AnimatorListenerAdapter(){
 //        });
-                animator.start();
+        animator.start();
     }
 
     @Override
