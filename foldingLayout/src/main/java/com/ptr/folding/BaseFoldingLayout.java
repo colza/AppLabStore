@@ -169,6 +169,7 @@ public class BaseFoldingLayout extends ViewGroup {
 		View child = getChildAt(0);
 		measureChild(child, widthMeasureSpec, heightMeasureSpec);
 		setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+        Log.i("LOG","onMeasure invoked");
 	}
 
 	@Override
@@ -263,6 +264,7 @@ public class BaseFoldingLayout extends ViewGroup {
 	}
 
 	private void updateFold() {
+        Log.i("LOG","updateFold");
 		prepareFold(mOrientation, mAnchorFactor, mNumberOfFolds);
 		calculateMatrices();
         requestLayout();
@@ -576,6 +578,7 @@ public class BaseFoldingLayout extends ViewGroup {
 
 	@Override
 	protected void dispatchDraw(Canvas canvas) {
+        Log.i("LOG", "dispatchDraw");
 		/**
 		 * If prepareFold has not been called or if preparation has not
 		 * completed yet, then no custom drawing will take place so only need to
