@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
@@ -16,7 +17,7 @@ public class FoldingAnimator {
     public static final int FOLD_ANIMATION_DURATION = 1000;
 
     public static void expandFold(final FoldingLayout rootView) {
-
+        Log.i("LOG", "expandFold");
 
         ObjectAnimator animator = createFoldAnimator(rootView, rootView.getFoldFactor(), 0);
         animator.addListener(new AnimatorListenerAdapter() {
@@ -30,6 +31,7 @@ public class FoldingAnimator {
     }
 
     public static void collapseFold(final FoldingLayout rootView) {
+        Log.i("LOG", "collapseFold");
         ObjectAnimator animator = createFoldAnimator(rootView, rootView.getFoldFactor(), 1.0f);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override

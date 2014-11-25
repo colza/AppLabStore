@@ -647,13 +647,13 @@ public class BaseFoldingLayout extends ViewGroup {
 			}
 
 			/* Draws the shadows corresponding to this specific fold. */
-			if (x % 2 == 0) {
-				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
-						mSolidShadow);
-			} else {
-				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
-						mGradientShadow);
-			}
+//			if (x % 2 == 0) {
+//				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
+//						mSolidShadow);
+//			} else {
+//				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
+//						mGradientShadow);
+//			}
 
 			canvas.restore();
 		}

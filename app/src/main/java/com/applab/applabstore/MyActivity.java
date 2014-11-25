@@ -40,7 +40,7 @@ import roboguice.inject.InjectView;
 
 
 public class MyActivity extends Activity {
-
+    public static Boolean sIsFoldingEffect = false;
     StResol stR;
 
     @Override
@@ -473,9 +473,13 @@ public class MyActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+
+        if( id == R.id.anim_effect ){
+            sIsFoldingEffect = sIsFoldingEffect ? false : true;
+            item.setTitle(sIsFoldingEffect ? R.string.effect_scale : R.string.effect_folding);
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 }

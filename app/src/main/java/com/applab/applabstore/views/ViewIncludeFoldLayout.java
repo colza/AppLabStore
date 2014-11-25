@@ -12,9 +12,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.applab.applabstore.Models.ModelAppType;
+import com.applab.applabstore.MyActivity;
 import com.applab.applabstore.R;
 import com.applab.applabstore.adapter.AdapterAppType;
+import com.applab.applabstore.animator.FoldingAnimator;
 import com.applab.applabstore.animator.ScaleAnimator;
+import com.ptr.folding.BaseFoldingLayout;
 import com.ptr.folding.FoldingLayout;
 
 import java.util.ArrayList;
@@ -49,16 +52,16 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 //        view.setImageResource(R.drawable.ic_launcher);
 //        view.setBackgroundColor(Color.BLUE);
 //        mFold.addView(view);
-        mFold.setBackgroundColor(Color.GREEN);
+        mFold.setOrientation(BaseFoldingLayout.Orientation.VERTICAL);
         mFold.addView(mAppListView);
 
         addView(mHeadView);
 
         mFold.setVisibility(View.GONE);
-        addView(mFold, mRel.mUI.mLayout.linParam(-1,0));
+        addView(mFold, mRel.mUI.mLayout.linParam(-1, 0));
     }
 
-    public void setData(ModelAppType data){
+    public void setData(ModelAppType data) {
         mHeadView.setData(data);
 //        mAppListView.refreshList(data.appListStr);
 
@@ -67,23 +70,37 @@ public class ViewIncludeFoldLayout extends LinearLayout {
             public void onClick(View view) {
 
                 int count = mAppListView.getAdapter().getCount();
-                int height = StResol.getInstance(view.getContext()).mResolK.szPDtoPC(100)*count;
+                int height = StResol.getInstance(view.getContext()).mResolK.szPDtoPC(100) * count;
 
                 if (mFold.getVisibility() == View.GONE) {
-                    Log.i("LOG","expand");
-                    if( sCurrentVisibleFold != null && sCurrentVisibleFold != mFold ){
-                        ScaleAnimator.collapse(sCurrentVisibleFold);
+                    Log.i("LOG", "expand");
+
+                    if (MyActivity.sIsFoldingEffect) {
+                        mFold.getLayoutParams().height = height;
+                        FoldingAnimator.expandFold(mFold);
+
+                    } else {
+
+                        if (sCurrentVisibleFold != null && sCurrentVisibleFold != mFold) {
+                            ScaleAnimator.collapse(sCurrentVisibleFold);
+                        }
+
+                        ScaleAnimator.expand(mFold, height);
                     }
 
-                    ScaleAnimator.expand(mFold, height);
                     sCurrentVisibleFold = mFold;
 //                        collapseFold(mFold);
 //                        expand(mFold);
 //                    expandFold(mFold);
 //                        animateFold(mFold, 1000);
                 } else {
-                    Log.i("LOG","collapse");
-                    ScaleAnimator.collapse(mFold);
+                    Log.i("LOG", "collapse");
+                    if (MyActivity.sIsFoldingEffect) {
+                        FoldingAnimator.collapseFold(mFold);
+                    } else {
+                        ScaleAnimator.collapse(mFold);
+                    }
+
                     sCurrentVisibleFold = null;
 //                    collapseFold(mFold);
 //                        collapse(mFold);
@@ -104,13 +121,13 @@ public class ViewIncludeFoldLayout extends LinearLayout {
             StResol res = StResol.getInstance(context);
 
             mImg = res.mUI.mImg.img(context, null, res.id++);
-            mTitle = res.mUI.mTv.textInit(context,36, Color.BLACK,null,res.id++,"");
+            mTitle = res.mUI.mTv.textInit(context, 36, Color.BLACK, null, res.id++, "");
 
             addView(mImg, res.mUI.mLayout.relParam(100, 100, null, new int[]{10, 10, 10, 10}));
-            addView(mTitle, res.mUI.mLayout.relParam(-2,-2,new int[]{RIGHT_OF, mImg.getId(), CENTER_VERTICAL}));
+            addView(mTitle, res.mUI.mLayout.relParam(-2, -2, new int[]{RIGHT_OF, mImg.getId(), CENTER_VERTICAL}));
         }
 
-        public void setData(ModelAppType data){
+        public void setData(ModelAppType data) {
             mImg.setImageResource(data.resImg);
             mTitle.setText(data.title);
             setBackgroundColor(data.colorBg);
@@ -123,7 +140,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
         public AppListView(Context context) {
             super(context);
 //            setOrientation(LinearLayout.VERTICAL);
-            List<String> list = Arrays.asList(new String[]{"One","Two","Three"});
+            List<String> list = Arrays.asList(new String[]{"One", "Two", "Three"});
             setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, list));
         }
     }
