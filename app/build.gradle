@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 20
-    buildToolsVersion "20"
+    buildToolsVersion '20'
 
     defaultConfig {
         applicationId "com.applab.applabstore"
@@ -21,4 +21,9 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    provided 'org.roboguice:roboblender:3.+'
+    compile 'org.roboguice:roboguice:3.+'
+    compile files('libs/ResolKnight.jar')
+    compile files('libs/commons-lang3-3.1.jar')
+    compile project(':foldingLayout')
 }
