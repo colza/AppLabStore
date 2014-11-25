@@ -1,12 +1,14 @@
 package com.applab.applabstore;
 
 import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -51,8 +53,10 @@ public class MyActivity extends Activity{
         }
 
         ((MyAdapter)listView.getAdapter()).applyDataToList(list);
-        setContentView(listView);
+//        setContentView(listView);
+        setContentView(new AppType(this));
     }
+
 
     public class MyModel{
         public int imgResource;
@@ -106,10 +110,22 @@ public class MyActivity extends Activity{
         }
     }
 
+    public class MyFoldingLayout extends FoldingLayout{
+        public MyFoldingLayout(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+            super.onSizeChanged(w, h, oldw, oldh);
+            Log.i("LOG", "Size change to w = " + w + ", h = " + h);
+        }
+    }
+
     public class AppType extends RelativeLayout{
         TextView mTv;
         ImageView mImg;
-        FoldingLayout mFold;
+        MyFoldingLayout mFold;
 
         public AppType(Context context) {
             super(context);
@@ -120,19 +136,37 @@ public class MyActivity extends Activity{
             mImg.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    animateFold(mFold,2000);
+                    // where trigger animation
+                    if(mFold.getVisibility() == View.GONE){
+                        Log.i("LOG","expand");
+                        expand(mFold);
+                    }else{
+                        Log.i("LOG","collapse");
+                        collapse(mFold);
+                    }
                 }
             });
 
             addView(mImg);
             addView(mTv, stR.mUI.mLayout.relParam(-2, -2, new int[]{RIGHT_OF, mImg.getId()}));
 
-            mFold = new FoldingLayout(context);
-//            ImageView childView = new ImageView(context);
-//            childView.setImageResource(R.drawable.ic_launcher);
-//            childView.setBackgroundColor(Color.GREEN);
+            mFold = new MyFoldingLayout(context);
+            mFold.setId(stR.id++);
 
-            mFold.addView(new MyListView(context));
+            LinearLayout lin = new LinearLayout(context);
+            lin.setOrientation(LinearLayout.VERTICAL);
+
+            ImageView childView = new ImageView(context);
+            childView.setImageResource(R.drawable.ic_launcher);
+            childView.setBackgroundColor(Color.GREEN);
+            lin.addView(childView);
+
+            TextView ch2 = new TextView(context);
+            ch2.setText("Hello\n My name is Quentin \n I'm an Android Developer \n who love create customized effect!!");
+            lin.addView(ch2);
+
+//            mFold.addView(new MyListView(context));
+            mFold.addView(lin);
             mFold.setBackgroundColor(Color.GREEN);
 
             addView(mFold, stR.mUI.mLayout.relParam(-1, 300, new int[]{BELOW, mImg.getId()}));
@@ -146,9 +180,13 @@ public class MyActivity extends Activity{
 
                 @Override
                 public void onEndFold() {
-                    mFold.setVisibility(View.GONE);
+//                    mFold.setVisibility(View.GONE);
                 }
             });
+
+            ImageView img = new ImageView(context);
+            img.setImageResource(R.drawable.ic_launcher);
+            addView(img, stR.mUI.mLayout.relParam(-1, -2, new int[]{BELOW, mFold.getId()}));
         }
 
         public void setData(MyModel model){
@@ -168,6 +206,88 @@ public class MyActivity extends Activity{
         }
     }
 
+    public void expand(View rootView){
+        rootView.setVisibility(View.VISIBLE);
+
+        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+
+        rootView.measure(widthSpec,heightSpec);
+        ValueAnimator anim = createAnimator(rootView, 0, originHeight);
+        anim.start();
+    }
+
+    int originHeight = 0;
+    public void collapse(final View rootView){
+        if( originHeight == 0 ){
+            originHeight = rootView.getHeight();
+        }
+
+        ValueAnimator anim = createAnimator(rootView, originHeight, 0 );
+        anim.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                rootView.setVisibility(View.GONE);
+            }
+        });
+
+        anim.start();
+    }
+
+    public ValueAnimator createAnimator(final View rootView, int start, int end){
+        ValueAnimator anim = ValueAnimator.ofInt(start, end);
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int height = (Integer) valueAnimator.getAnimatedValue();
+                rootView.getLayoutParams().height = height;
+                rootView.requestLayout();
+            }
+        });
+
+        return anim;
+    }
+
+//    public ValueAnimator createAnimator(final AppType rootView, float start, float end){
+//        ValueAnimator anim = ValueAnimator.ofFloat(start, end);
+//
+//        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                float value = (Float) valueAnimator.getAnimatedValue();
+//                rootView.getLayoutParams().height =
+//            }
+//        });
+//        float foldFactor = fold.getFoldFactor();
+//
+////        ObjectAnimator animator = ObjectAnimator.ofFloat(fold,
+////                "foldFactor", foldFactor, 1);
+//        ObjectAnimator animator = ObjectAnimator.ofFloat(fold,
+//                "foldFactor", foldFactor, 0.5f);
+////        animator.setRepeatMode(ValueAnimator.REVERSE);
+////        animator.setRepeatCount(1);
+//        ObjectAnimator.setFrameDelay(1000);
+//        animator.setDuration(duration);
+//        animator.setInterpolator(new AccelerateInterpolator());
+//        final int height = fold.getHeight();
+//        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                Float f = (Float) valueAnimator.getAnimatedValue();
+//
+//                Log.i("update", ((Float) valueAnimator.getAnimatedValue()).toString());
+////                Log.i("update", "ScaleY = " + fold.getScaleY() + ", Y = "+ fold.getY() + ", Bot = " + fold.getBottom());
+//                Log.i("update","RotationX = " + fold.getRotationX() + ", RotationY = " + fold.getRotationY());
+//                Log.i("update","PivotX = " + fold.getPivotX() + ", PivotY = " + fold.getPivotY());
+//                Log.i("update","height = " + fold.getHeight());
+//
+//                Float result = 1.0f-f;
+//                fold.getLayoutParams().height = (int) (height*result);
+//                fold.requestLayout();
+//            }
+//        });
+//    }
 
     /**
      * Animates the folding view inwards (to a completely folded state) from its
@@ -176,34 +296,36 @@ public class MyActivity extends Activity{
     public void animateFold(final FoldingLayout fold, int duration) {
         float foldFactor = fold.getFoldFactor();
 
+//        ObjectAnimator animator = ObjectAnimator.ofFloat(fold,
+//                "foldFactor", foldFactor, 1);
         ObjectAnimator animator = ObjectAnimator.ofFloat(fold,
-                "foldFactor", foldFactor, 1);
+                "foldFactor", foldFactor, 0.5f);
 //        animator.setRepeatMode(ValueAnimator.REVERSE);
 //        animator.setRepeatCount(1);
+        ObjectAnimator.setFrameDelay(1000);
         animator.setDuration(duration);
         animator.setInterpolator(new AccelerateInterpolator());
-        animator.addListener(new Animator.AnimatorListener() {
+        final int height = fold.getHeight();
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationStart(Animator animator) {
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                Float f = (Float) valueAnimator.getAnimatedValue();
 
-            }
+                Log.i("update", ((Float) valueAnimator.getAnimatedValue()).toString());
+//                Log.i("update", "ScaleY = " + fold.getScaleY() + ", Y = "+ fold.getY() + ", Bot = " + fold.getBottom());
+                Log.i("update","RotationX = " + fold.getRotationX() + ", RotationY = " + fold.getRotationY());
+                Log.i("update","PivotX = " + fold.getPivotX() + ", PivotY = " + fold.getPivotY());
+                Log.i("update","height = " + fold.getHeight());
 
-            @Override
-            public void onAnimationEnd(Animator animator) {
-                fold.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animator) {
-
+                Float result = 1.0f-f;
+                fold.getLayoutParams().height = (int) (height*result);
+                fold.requestLayout();
             }
         });
-        animator.start();
+
+        animator.addListener(new AnimatorListenerAdapter(){
+        });
+                animator.start();
     }
 
     @Override
