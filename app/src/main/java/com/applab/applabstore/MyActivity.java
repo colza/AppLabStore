@@ -118,7 +118,6 @@ public class MyActivity extends Activity {
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             super.onSizeChanged(w, h, oldw, oldh);
-            Log.i("LOG", "Size change to w = " + w + ", h = " + h);
         }
     }
 
@@ -259,18 +258,18 @@ public class MyActivity extends Activity {
 //                rootView.getLayoutParams().height = height;
 //                rootView.requestLayout();
 
-                count++;
-                if (count == 2) {
-                    count = 0;
-                    Float f = (Float) valueAnimator.getAnimatedValue();
-                    Float result = 1.0f - f;
-//                    ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) rootView.getLayoutParams();
-//                    param.bottomMargin = -(int) (300 * f);
-                    ViewGroup.LayoutParams param = rootView.getLayoutParams();
-                    param.height = (int) (300 * result);
-
-                    rootView.requestLayout();
-                }
+//                count++;
+//                if (count == 2) {
+//                    count = 0;
+//                    Float f = (Float) valueAnimator.getAnimatedValue();
+//                    Float result = 1.0f - f;
+////                    ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) rootView.getLayoutParams();
+////                    param.bottomMargin = -(int) (300 * f);
+//                    ViewGroup.LayoutParams param = rootView.getLayoutParams();
+//                    param.height = (int) (300 * result);
+//
+//                    rootView.requestLayout();
+//                }
 
             }
         });

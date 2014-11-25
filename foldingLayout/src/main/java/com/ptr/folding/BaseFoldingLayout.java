@@ -29,6 +29,7 @@ import android.graphics.Paint.Style;
 import android.graphics.Rect;
 import android.graphics.Shader.TileMode;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -174,6 +175,7 @@ public class BaseFoldingLayout extends ViewGroup {
 	protected void onLayout(boolean changed, int l, int t, int r, int b) {
 		View child = getChildAt(0);
 		child.layout(0, 0, child.getMeasuredWidth(), child.getMeasuredHeight());
+        Log.i("LOG", "width = " + child.getMeasuredWidth() + ", height = " + child.getMeasuredHeight());
 		updateFold();
 	}
 
@@ -263,7 +265,8 @@ public class BaseFoldingLayout extends ViewGroup {
 	private void updateFold() {
 		prepareFold(mOrientation, mAnchorFactor, mNumberOfFolds);
 		calculateMatrices();
-		invalidate();
+        requestLayout();
+//		invalidate();
 	}
 
 	/**
@@ -423,6 +426,8 @@ public class BaseFoldingLayout extends ViewGroup {
 		mFoldDrawHeight = mFoldMaxHeight < translatedDistancePerFold ? translatedDistancePerFold
 				: mFoldMaxHeight;
 
+        Log.i("LOG","drawHeight = " + mFoldDrawHeight);
+
 		float translatedDistanceFoldSquared = translatedDistancePerFold
 				* translatedDistancePerFold;
 
@@ -452,8 +457,12 @@ public class BaseFoldingLayout extends ViewGroup {
 			scaledHeight = mFoldDrawHeight * cTranslationFactor;
 		}
 
+        Log.i("LOG","scaleH = " + scaledHeight);
+
 		topScaledPoint = (mFoldDrawHeight - scaledHeight) / 2.0f;
 		bottomScaledPoint = topScaledPoint + scaledHeight;
+
+        Log.i("LOG","bottomPoint = " + bottomScaledPoint);
 
 		leftScaledPoint = (mFoldDrawWidth - scaledWidth) / 2.0f;
 		rightScaledPoint = leftScaledPoint + scaledWidth;
@@ -626,14 +635,15 @@ public class BaseFoldingLayout extends ViewGroup {
 					canvas.translate(0, src.top);
 				}
 			}
+
 			/* Draws the shadows corresponding to this specific fold. */
-			if (x % 2 == 0) {
-				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
-						mSolidShadow);
-			} else {
-				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
-						mGradientShadow);
-			}
+//			if (x % 2 == 0) {
+//				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
+//						mSolidShadow);
+//			} else {
+//				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
+//						mGradientShadow);
+//			}
 
 			canvas.restore();
 		}
