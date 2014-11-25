@@ -23,6 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import com.applab.applabstore.Models.ModelAppType;
+import com.applab.applabstore.adapter.AdapterAppType;
+import com.applab.applabstore.views.ViewIncludeFoldLayout;
 import com.ptr.folding.BaseFoldingLayout;
 import com.ptr.folding.FoldingLayout;
 import com.ptr.folding.listener.OnFoldListener;
@@ -46,16 +49,57 @@ public class MyActivity extends Activity {
         stR = StResol.getInstance(this);
 
         ListView listView = new ListView(this);
-        listView.setAdapter(new MyAdapter());
+        AdapterAppType ada = new AdapterAppType();
+        listView.setAdapter(ada);
 
-        List<MyModel> list = new ArrayList<MyModel>();
-        for (int i = 0; i < 1; i++) {
-            list.add(new MyModel(R.drawable.ic_launcher, "Number " + i));
+        List<ModelAppType> listData = new ArrayList<ModelAppType>();
+        for(int i = 0 ; i < 4 ; i++ ){
+            ModelAppType data = new ModelAppType();
+            data.resImg = R.drawable.ic_launcher;
+            data.title = "Hello";
+            data.colorBg = Color.GRAY;
+            data.appListStr = Arrays.asList(new String[]{"One","Two","Three"});
+            listData.add(data);
         }
 
-        ((MyAdapter) listView.getAdapter()).applyDataToList(list);
-//        setContentView(listView);
-        setContentView(new AppType(this));
+        ada.addListItem(listData);
+        ada.notifyDataSetChanged();
+        setContentView(listView);
+
+//        LinearLayout lin = new LinearLayout(this);
+//        lin.setOrientation(LinearLayout.VERTICAL);
+//
+//        for(int i = 0 ; i < 4 ; i++ ){
+//            ModelAppType data = new ModelAppType();
+//            data.resImg = R.drawable.ic_launcher;
+//            data.title = "Hello";
+//            data.colorBg = Color.GRAY;
+//            data.appListStr = Arrays.asList(new String[]{"One","Two","Three"});
+//            ViewIncludeFoldLayout view = new ViewIncludeFoldLayout(this);
+//            view.setData(data);
+//            lin.addView(view);
+//        }
+//
+//        setContentView(lin);
+
+//        listView.setAdapter(new MyAdapter());
+//
+//        List<MyModel> list = new ArrayList<MyModel>();
+//        for (int i = 0; i < 1; i++) {
+//            list.add(new MyModel(R.drawable.ic_launcher, "Number " + i));
+//        }
+//
+//        ((MyAdapter) listView.getAdapter()).applyDataToList(list);
+//        setContentView(new AppType(this));
+
+//        ViewIncludeFoldLayout view = new ViewIncludeFoldLayout(this);
+//        ModelAppType data = new ModelAppType();
+//        data.resImg = R.drawable.ic_launcher;
+//        data.title = "Hello";
+//        data.colorBg = Color.GRAY;
+//        data.appListStr = Arrays.asList(new String[]{"One", "Two", "Three"});
+//        view.setData(data);
+//        setContentView(view);
     }
 
 
@@ -121,10 +165,12 @@ public class MyActivity extends Activity {
         }
     }
 
+    public ImageView mBottomImg;
     public class AppType extends RelativeLayout {
         TextView mTitle;
         ImageView mImgOnLeft;
         MyFoldingLayout mFold;
+
 
         public AppType(Context context) {
             super(context);
@@ -195,9 +241,9 @@ public class MyActivity extends Activity {
                 }
             });
 
-            ImageView img = new ImageView(context);
-            img.setImageResource(R.drawable.ic_launcher);
-            addView(img, stR.mUI.mLayout.relParam(-1, -2, new int[]{BELOW, mFold.getId()}));
+            mBottomImg = new ImageView(context);
+            mBottomImg.setImageResource(R.drawable.ic_launcher);
+            addView(mBottomImg, stR.mUI.mLayout.relParam(-1, -2, new int[]{BELOW, mFold.getId()}));
         }
 
         public void setData(MyModel model) {
@@ -258,18 +304,24 @@ public class MyActivity extends Activity {
 //                rootView.getLayoutParams().height = height;
 //                rootView.requestLayout();
 
-//                count++;
-//                if (count == 2) {
-//                    count = 0;
-//                    Float f = (Float) valueAnimator.getAnimatedValue();
-//                    Float result = 1.0f - f;
-////                    ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) rootView.getLayoutParams();
-////                    param.bottomMargin = -(int) (300 * f);
+                Float f = (Float) valueAnimator.getAnimatedValue();
+                Float result = 1.0f - f;
+//                    ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) rootView.getLayoutParams();
+//                    param.bottomMargin = -(int) (300 * f);
+
+//                int transHeight = (int)(f*300);
+//                ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams)mBottomImg.getLayoutParams();
+//                param.topMargin = -transHeight;
+//                mBottomImg.requestLayout();
+
+//                int bottom = rootView.getBottom();
+//                bottom = bottom - (int) (f * 300);
+//                Log.i("LOG", "Bottom = " + bottom);
+//                rootView.layout(rootView.getLeft(), rootView.getTop(), rootView.getRight(), bottom);
 //                    ViewGroup.LayoutParams param = rootView.getLayoutParams();
 //                    param.height = (int) (300 * result);
 //
 //                    rootView.requestLayout();
-//                }
 
             }
         });

@@ -267,8 +267,8 @@ public class BaseFoldingLayout extends ViewGroup {
         Log.i("LOG","updateFold");
 		prepareFold(mOrientation, mAnchorFactor, mNumberOfFolds);
 		calculateMatrices();
-        requestLayout();
-//		invalidate();
+//        requestLayout();
+		invalidate();
 	}
 
 	/**
@@ -460,6 +460,8 @@ public class BaseFoldingLayout extends ViewGroup {
 		}
 
         Log.i("LOG","scaleH = " + scaledHeight);
+//        getLayoutParams().height = (int)scaledHeight;
+//        requestLayout();
 
 		topScaledPoint = (mFoldDrawHeight - scaledHeight) / 2.0f;
 		bottomScaledPoint = topScaledPoint + scaledHeight;
@@ -551,6 +553,10 @@ public class BaseFoldingLayout extends ViewGroup {
 			/* Sets the shadow and bitmap transformation matrices. */
 			mMatrix[x].setPolyToPoly(mSrc, 0, mDst, 0, NUM_OF_POLY_POINTS / 2);
 		}
+
+
+        /** Below is for Shadow Effect. **/
+
 		/*
 		 * The shadows on the folds are split into two parts: Solid shadows and
 		 * gradients. Every other fold has a solid shadow which overlays the
@@ -630,6 +636,7 @@ public class BaseFoldingLayout extends ViewGroup {
 					canvas.translate(0, -src.top);
 				}
 
+                Log.i("LOG","In dispatchDraw, Bottom = " + src.bottom);
 				super.dispatchDraw(canvas);
 
 				if (mIsHorizontal) {
@@ -640,13 +647,13 @@ public class BaseFoldingLayout extends ViewGroup {
 			}
 
 			/* Draws the shadows corresponding to this specific fold. */
-//			if (x % 2 == 0) {
-//				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
-//						mSolidShadow);
-//			} else {
-//				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
-//						mGradientShadow);
-//			}
+			if (x % 2 == 0) {
+				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
+						mSolidShadow);
+			} else {
+				canvas.drawRect(0, 0, mFoldDrawWidth, mFoldDrawHeight,
+						mGradientShadow);
+			}
 
 			canvas.restore();
 		}
