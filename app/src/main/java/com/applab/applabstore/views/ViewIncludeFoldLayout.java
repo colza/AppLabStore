@@ -110,7 +110,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 
     private int originHeight = 100;
     public class MyLinear extends LinearLayout {
-
+        StResol stRel;
         @Override
         protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -125,21 +125,26 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 
         public MyLinear(Context context, String[] name) {
             super(context);
-            StResol rel = StResol.getInstance(context);
+            stRel = StResol.getInstance(context);
             setOrientation(VERTICAL);
+        }
 
-            for (int i = 0; i < name.length; i++) {
-                TextView tv = rel.mUI.mTv.textInit(context, 35, Color.BLACK, null, rel.id++, name[i]);
+        public void attachChildView(int index){
+            String[] name = getResources().getStringArray(R.array.subtitle);
+
+            for (int i = 0; i <= index; i++) {
+                TextView tv = stRel.mUI.mTv.textInit(getContext(), 35, Color.BLACK, null, stRel.id++, name[i]);
                 tv.setGravity(Gravity.CENTER_VERTICAL);
                 tv.setPadding(20,0,0,0);
                 tv.setBackgroundColor(Color.WHITE);
-                addView(tv, rel.mUI.mLayout.linParam(-1, originHeight));
+                addView(tv, stRel.mUI.mLayout.linParam(-1, originHeight));
             }
         }
     }
 
     public void setData(ModelAppType data) {
         mHeadView.setData(data);
+        mMyLin.attachChildView(data.index);
 //        mAppListView.refreshList(data.appListStr);
 
         mHeadView.setOnClickListener(new OnClickListener() {

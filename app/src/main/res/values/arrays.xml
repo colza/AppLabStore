@@ -23,4 +23,13 @@
         <item>Outdoors</item>
     </array>
 
+    <array name="subtitle">
+        <item>One, One apple a day, keeps doctor away</item>
+        <item>Two, It takes Two to tango </item>
+        <item>Three, Three idiots is a good movie</item>
+        <item>Four, Forever Love</item>
+        <item>Five, Give me Five! High Five!</item>
+    </array>
+
+
 </resources>

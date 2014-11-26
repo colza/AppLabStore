@@ -9,5 +9,5 @@ public class ModelAppType{
     public int resImg;
     public String title;
     public int colorBg;
-    public List<String> appListStr;
+    public int index;
 }

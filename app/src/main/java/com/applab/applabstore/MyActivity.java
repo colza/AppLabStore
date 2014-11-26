@@ -65,7 +65,7 @@ public class MyActivity extends Activity {
             data.resImg = icons.getResourceId(i, R.drawable.ic_launcher);
             data.title = titles.getString(i);
             data.colorBg = colors.getColor(i, 0xFF000000);
-            data.appListStr = Arrays.asList(new String[]{"One", "Two", "Three"});
+            data.index = i;
             listData.add(data);
         }
 
