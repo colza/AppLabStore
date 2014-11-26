@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="icons">
+        <item>@drawable/music100</item>
+        <item>@drawable/museum100</item>
+        <item>@drawable/train100</item>
+        <item>@drawable/ping_pong100</item>
+        <item>@drawable/close_up_mode100</item>
+    </array>
+    <array name="colors">
+        <item>#ffea211a</item>
+        <item>#ffeabc4c</item>
+        <item>#ff85ea44</item>
+        <item>#ff6199ea</item>
+        <item>#ff903cea</item>
+    </array>
+
+    <array name="title">
+        <item>Music</item>
+        <item>Museum</item>
+        <item>Transport</item>
+        <item>Sports</item>
+        <item>Outdoors</item>
+    </array>
+
+</resources>

@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,12 +56,15 @@ public class MyActivity extends Activity {
         AdapterAppType ada = new AdapterAppType();
         listView.setAdapter(ada);
 
+        TypedArray icons = getResources().obtainTypedArray(R.array.icons);
+        TypedArray colors = getResources().obtainTypedArray(R.array.colors);
+        TypedArray titles = getResources().obtainTypedArray(R.array.title);
         List<ModelAppType> listData = new ArrayList<ModelAppType>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             ModelAppType data = new ModelAppType();
-            data.resImg = R.drawable.ic_launcher;
-            data.title = "Hello";
-            data.colorBg = Color.GRAY;
+            data.resImg = icons.getResourceId(i, R.drawable.ic_launcher);
+            data.title = titles.getString(i);
+            data.colorBg = colors.getColor(i, 0xFF000000);
             data.appListStr = Arrays.asList(new String[]{"One", "Two", "Three"});
             listData.add(data);
         }

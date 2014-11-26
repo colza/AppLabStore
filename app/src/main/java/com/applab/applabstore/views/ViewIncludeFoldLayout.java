@@ -79,7 +79,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 
         mRel = StResol.getInstance(context);
         setOrientation(VERTICAL);
-        setBackgroundColor(Color.BLACK);
+        setBackgroundColor(Color.GRAY);
 
         mHeadView = new ViewAppType(context);
         mHeadView.setId(mRel.id++);
