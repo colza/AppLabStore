@@ -2,6 +2,7 @@ package com.applab.applabstore;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 import com.applab.applabstore.Models.ModelAppType;
 import com.applab.applabstore.adapter.AdapterAppType;
+import com.applab.applabstore.animator.MyRotateAnimator;
 import com.applab.applabstore.views.ViewIncludeFoldLayout;
 import com.ptr.folding.BaseFoldingLayout;
 import com.ptr.folding.FoldingLayout;
@@ -53,12 +55,12 @@ public class MyActivity extends Activity {
         listView.setAdapter(ada);
 
         List<ModelAppType> listData = new ArrayList<ModelAppType>();
-        for(int i = 0 ; i < 4 ; i++ ){
+        for (int i = 0; i < 4; i++) {
             ModelAppType data = new ModelAppType();
             data.resImg = R.drawable.ic_launcher;
             data.title = "Hello";
             data.colorBg = Color.GRAY;
-            data.appListStr = Arrays.asList(new String[]{"One","Two","Three"});
+            data.appListStr = Arrays.asList(new String[]{"One", "Two", "Three"});
             listData.add(data);
         }
 
@@ -90,7 +92,7 @@ public class MyActivity extends Activity {
 //        }
 //
 //        ((MyAdapter) listView.getAdapter()).applyDataToList(list);
-//        setContentView(new AppType(this));
+        setContentView(new AppType(this));
 
 //        ViewIncludeFoldLayout view = new ViewIncludeFoldLayout(this);
 //        ModelAppType data = new ModelAppType();
@@ -165,11 +167,14 @@ public class MyActivity extends Activity {
         }
     }
 
-    public ImageView mBottomImg;
+//    public ImageView mBottomImg;
+
     public class AppType extends RelativeLayout {
         TextView mTitle;
         ImageView mImgOnLeft;
         MyFoldingLayout mFold;
+        LinearLayout secView;
+        LinearLayout thirdView;
 
 
         public AppType(Context context) {
@@ -185,29 +190,87 @@ public class MyActivity extends Activity {
             rel.addView(mTitle, stR.mUI.mLayout.relParam(-2, -2, new int[]{RIGHT_OF, mImgOnLeft.getId(), CENTER_VERTICAL}));
 
 
-            rel.setOnClickListener(new OnClickListener() {
+            mTitle.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // where trigger animation
-                    if (mFold.getVisibility() == View.GONE) {
-                        Log.i("LOG", "expand");
-//                        collapseFold(mFold);
-//                        expand(mFold);
-                        expandFold(mFold);
-//                        animateFold(mFold, 1000);
-                    } else {
-                        Log.i("LOG", "collapse");
-                        collapseFold(mFold);
-//                        collapse(mFold);
-//                        collapse(mFold);
-//                        animateFold(mFold, 1000);
-                    }
+//                    mFold.setPivotX(0);
+//                    mFold.animate().rotationXBy(90).rotationX(0).scaleY(1.5f);
+
+                    mFold.setPivotY(0);
+                    ObjectAnimator anim = MyRotateAnimator.createAnimatorX(mFold, 0, -90);
+                    anim.start();
+
+//                    ValueAnimator anim2 = createAnimator(mFold, mFold.getHeight(), 0);
+//                    AnimatorSet set = new AnimatorSet();
+//                    set.playTogether(anim, anim2);
+//                    set.start();
+
+//                    secView.setPivotX(secView.getHeight());
+                    int h = secView.getHeight();
+                    Log.i("LOG","height = " + h);
+                    secView.setPivotY(secView.getHeight());
+                    ObjectAnimator animSec = MyRotateAnimator.createAnimatorX(secView, 0, 90);
+                    ValueAnimator animSec2 = createAnimator(secView, secView.getHeight(), 0);
+                    AnimatorSet set2 = new AnimatorSet();
+                    set2.playTogether(animSec, animSec2);
+//                    set2.start();
                 }
             });
+//
+//            rel.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//
+//                    ObjectAnimator anim = MyRotateAnimator.createAnimatorX(mFold, 0, -90 );
+//                    anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//                        @Override
+//                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                            float value = (Float) valueAnimator.getAnimatedValue();
+//                            Object res = valueAnimator.getAnimatedValue("pivotX");
+//                            if( res != null ){
+//                                float alpha = (Float)res;
+//                                Log.i("LOG","alpha = " + alpha);
+//                            }
+//                            else{
+//                                Log.i("LOG","alpha = NULL");
+//                            }
+//
+//                            // this is the angle
+//                            Log.i("LOG","Anim value = " + value);
+//                        }
+//                    });
+//
+//                    ValueAnimator anim1 = createAnimator(mFold, mFold.getHeight(), 0);
+//                    // where trigger animation
+//                    if (mFold.getVisibility() == View.GONE) {
+//                        Log.i("LOG", "expand");
+////                        collapseFold(mFold);
+////                        expand(mFold);
+////                        expandFold(mFold);
+////                        expand(mFakeBgView);
+////                        animateFold(mFold, 1000);
+//
+//                        anim.start();
+////                        anim1.start();
+//
+//                    } else {
+//                        Log.i("LOG", "collapse");
+//
+//                        anim.start();
+////                        anim1.start();
+////                        collapseFold(mFold);
+////                        collapse(mFakeBgView);
+////                        collapse(mFold);
+////                        collapse(mFold);
+////                        animateFold(mFold, 1000);
+//                    }
+//                }
+//            });
 
             addView(rel, stR.mUI.mLayout.relParam(-1, -2, null));
 
             mFold = new MyFoldingLayout(context);
+            mFold.setOrientation(BaseFoldingLayout.Orientation.VERTICAL);
             mFold.setId(stR.id++);
 
             LinearLayout lin = new LinearLayout(context);
@@ -216,34 +279,49 @@ public class MyActivity extends Activity {
             ImageView childView = new ImageView(context);
             childView.setImageResource(R.drawable.ic_launcher);
             childView.setBackgroundColor(Color.GREEN);
-            lin.addView(childView);
+            lin.addView(childView, stR.mUI.mLayout.linParam(100,100));
 
             TextView ch2 = new TextView(context);
-            ch2.setText("Hello\n My name is Quentin \n I'm an Android Developer \n who love create customized effect!!");
+            ch2.setText("Hello\n My name is Quentin \n I'm an Android Developer \n who loves creating customized effect!!");
             lin.addView(ch2);
 
 //            mFold.addView(new MyListView(context));
             mFold.addView(lin);
+            mFold.setId(stR.id++);
+            mFold.setBackgroundColor(Color.YELLOW);
+            addView(mFold, stR.mUI.mLayout.relParam(-1, 300, new int[]{BELOW, rel.getId()}));
 //            mFold.setBackgroundColor(Color.GREEN);
 
-            addView(mFold, stR.mUI.mLayout.relParam(-1, 300, new int[]{BELOW, rel.getId()}));
+//            mFakeBgView = new View(context);
+//            mFakeBgView.setId(stR.id++);
+//            mFakeBgView.setBackgroundColor(Color.BLACK);
+//            addView(mFakeBgView, stR.mUI.mLayout.relParam(-1, 300, new int[]{BELOW, rel.getId()}));
 
-            mFold.setOrientation(BaseFoldingLayout.Orientation.VERTICAL);
-            mFold.setFoldListener(new OnFoldListener() {
-                @Override
-                public void onStartFold() {
-//                    mFold.setVisibility(View.VISIBLE);
-                }
+            secView = new LinearLayout(context);
+            secView.setId(stR.id++);
+            secView.setBackgroundColor(Color.BLUE);
+            secView.setOrientation(LinearLayout.VERTICAL);
 
-                @Override
-                public void onEndFold() {
-//                    mFold.setVisibility(View.GONE);
-                }
-            });
+            ImageView img = new ImageView(context);
+            img.setImageResource(R.drawable.ic_launcher);
+            img.setBackgroundColor(Color.GREEN);
+            secView.addView(img, stR.mUI.mLayout.linParam(100,100));
 
-            mBottomImg = new ImageView(context);
-            mBottomImg.setImageResource(R.drawable.ic_launcher);
-            addView(mBottomImg, stR.mUI.mLayout.relParam(-1, -2, new int[]{BELOW, mFold.getId()}));
+            TextView ch3 = new TextView(context);
+            ch3.setText("Hello\n My name is Quentin \n I'm an Android Developer \n who loves creating customized effect!!");
+            ch3.setTextSize(20);
+            secView.addView(ch3);
+            addView(secView, stR.mUI.mLayout.relParam(-1, -2, new int[]{BELOW, mFold.getId()}));
+
+            thirdView = new LinearLayout(context);
+            thirdView.setBackgroundColor(Color.MAGENTA);
+            thirdView.setOrientation(LinearLayout.VERTICAL);
+            TextView ch4 = new TextView(context);
+            ch4.setTextSize(20);
+            ch4.setText("Hello\n My name is Quentin \n I'm an Android Developer \n who loves creating customized effect!!");
+            thirdView.addView(ch4);
+
+            addView(thirdView, stR.mUI.mLayout.relParam(-1, -2, new int[]{BELOW, secView.getId()}));
         }
 
         public void setData(MyModel model) {
@@ -368,6 +446,7 @@ public class MyActivity extends Activity {
 
     public ValueAnimator createAnimator(final View rootView, int start, int end) {
         ValueAnimator anim = ValueAnimator.ofInt(start, end);
+        anim.setDuration(FOLD_ANIMATION_DURATION);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -474,7 +553,7 @@ public class MyActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if( id == R.id.anim_effect ){
+        if (id == R.id.anim_effect) {
             sIsFoldingEffect = sIsFoldingEffect ? false : true;
             item.setTitle(sIsFoldingEffect ? R.string.effect_scale : R.string.effect_folding);
             return true;

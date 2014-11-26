@@ -27,8 +27,10 @@ public class FoldingAnimator {
                 rootView.setVisibility(View.VISIBLE);
             }
         });
+        
         animator.start();
     }
+
 
     public static void collapseFold(final FoldingLayout rootView) {
         Log.i("LOG", "collapseFold");
@@ -47,35 +49,6 @@ public class FoldingAnimator {
         ObjectAnimator anim = ObjectAnimator.ofFloat(rootView, "foldFactor", start, end);
         anim.setDuration(FOLD_ANIMATION_DURATION);
         anim.setInterpolator(new AccelerateInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-//                int height = (Integer) valueAnimator.getAnimatedValue();
-//                rootView.getLayoutParams().height = height;
-//                rootView.requestLayout();
-
-                Float f = (Float) valueAnimator.getAnimatedValue();
-                Float result = 1.0f - f;
-//                    ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams) rootView.getLayoutParams();
-//                    param.bottomMargin = -(int) (300 * f);
-
-//                int transHeight = (int)(f*300);
-//                ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams)mBottomImg.getLayoutParams();
-//                param.topMargin = -transHeight;
-//                mBottomImg.requestLayout();
-
-//                int bottom = rootView.getBottom();
-//                bottom = bottom - (int) (f * 300);
-//                Log.i("LOG", "Bottom = " + bottom);
-//                rootView.layout(rootView.getLeft(), rootView.getTop(), rootView.getRight(), bottom);
-//                    ViewGroup.LayoutParams param = rootView.getLayoutParams();
-//                    param.height = (int) (300 * result);
-//
-//                    rootView.requestLayout();
-
-            }
-        });
-
         return anim;
     }
 }
