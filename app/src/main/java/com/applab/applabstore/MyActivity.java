@@ -41,7 +41,11 @@ import co.herxun.library.singleton.StResol;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 
-
+/**
+ * Created by TsaiKunYu on 26/11/2014.
+ *
+ * The com.applab.applabstore.activity containing the view which show the folding & expand/collapse effect.
+ */
 public class MyActivity extends Activity {
     StResol stR;
 
@@ -579,7 +583,7 @@ public class MyActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // as you specify a parent com.applab.applabstore.activity in AndroidManifest.xml.
 //        int id = item.getItemId();
 
 //        if (id == R.id.anim_effect) {

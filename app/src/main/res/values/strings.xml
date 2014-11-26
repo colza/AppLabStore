@@ -2,10 +2,5 @@
 <resources>
 
     <string name="app_name">AppLabStore</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
-    <string name="effect_folding">Folding Effect</string>
-    <string name="effect_scale">Scaling Effect</string>
-
 </resources>

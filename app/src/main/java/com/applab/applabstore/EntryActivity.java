@@ -22,6 +22,9 @@ import co.herxun.library.singleton.StResol;
 
 /**
  * Created by TsaiKunYu on 26/11/2014.
+ *
+ * Start from this Activity.
+ * Display buttons to choose different com.applab.applabstore.activity(MyActivity) behavior.
  */
 public class EntryActivity extends Activity{
 
@@ -30,7 +33,8 @@ public class EntryActivity extends Activity{
         super.onCreate(savedInstanceState);
 
         ListView listView = new ListView(this);
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Arrays.asList(new String[]{"Scale Expand/Collapse", "Fold Expand/Collapse"})));
+        String[] buttonName = getResources().getStringArray(R.array.entry_buttons);
+        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Arrays.asList(buttonName)));
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

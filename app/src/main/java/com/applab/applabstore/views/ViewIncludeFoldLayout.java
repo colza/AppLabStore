@@ -1,13 +1,7 @@
 package com.applab.applabstore.views;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,17 +13,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.applab.applabstore.Models.ModelAppType;
-import com.applab.applabstore.MyActivity;
 import com.applab.applabstore.MyConstants;
 import com.applab.applabstore.R;
-import com.applab.applabstore.adapter.AdapterAppType;
-import com.applab.applabstore.animator.FoldingAnimator;
 import com.applab.applabstore.animator.MyRotateAnimator;
-import com.applab.applabstore.animator.ScaleAnimator;
-import com.ptr.folding.BaseFoldingLayout;
-import com.ptr.folding.FoldingLayout;
+import com.applab.applabstore.animator.ExpandCollapseAnimator;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,6 +25,8 @@ import co.herxun.library.singleton.StResol;
 
 /**
  * Created by TsaiKunYu on 25/11/2014.
+ *
+ * The view compounds with Title & Subtitle.
  */
 public class ViewIncludeFoldLayout extends LinearLayout {
     private static View sCurrentVisibleFold;
@@ -171,9 +161,9 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                             break;
                         case MyConstants.ScaleExpand:
                             if (sCurrentVisibleFold != null && sCurrentVisibleFold != vg) {
-                                ScaleAnimator.collapse(sCurrentVisibleFold);
+                                ExpandCollapseAnimator.collapse(sCurrentVisibleFold);
                             }
-                            ScaleAnimator.expand(vg, height);
+                            ExpandCollapseAnimator.expand(vg, height);
 
                             break;
                     }
@@ -184,7 +174,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                             MyRotateAnimator.collapse(vg);
                             break;
                         case MyConstants.ScaleExpand:
-                            ScaleAnimator.collapse(vg);
+                            ExpandCollapseAnimator.collapse(vg);
                             break;
                     }
                     sCurrentVisibleFold = null;
@@ -218,7 +208,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 //                        view0.setPivotY(0);
 //                        view0.setPivotX(view0.getWidth()/2);
 //                        ObjectAnimator objAnim = MyRotateAnimator.createAnimatorX(view0, -90, 0);
-//                        ValueAnimator vAnim = ScaleAnimator.createAnimator(view0, 0, view0.getHeight());
+//                        ValueAnimator vAnim = ExpandCollapseAnimator.createAnimator(view0, 0, view0.getHeight());
 //                        AnimatorSet set = new AnimatorSet();
 //                        set.playTogether(objAnim, vAnim);
 //                        set.start();
@@ -226,10 +216,10 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 //                    } else {
 //
 //                        if (sCurrentVisibleFold != null && sCurrentVisibleFold != mFold) {
-//                            ScaleAnimator.collapse(sCurrentVisibleFold);
+//                            ExpandCollapseAnimator.collapse(sCurrentVisibleFold);
 //                        }
 //
-//                        ScaleAnimator.expand(mFold, height);
+//                        ExpandCollapseAnimator.expand(mFold, height);
 //                    }
 //
 //                    sCurrentVisibleFold = mFold;
@@ -247,7 +237,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 //                        view0.setPivotY(0);
 //                        view0.setPivotX(view0.getWidth()/2);
 //                        ObjectAnimator objAnim = MyRotateAnimator.createAnimatorX(view0, 0, -90);
-//                        ValueAnimator vAnim = ScaleAnimator.createAnimator(view0, view0.getHeight(),0 );
+//                        ValueAnimator vAnim = ExpandCollapseAnimator.createAnimator(view0, view0.getHeight(),0 );
 //                        AnimatorSet set = new AnimatorSet();
 //                        set.playTogether(objAnim, vAnim);
 //                        set.start();
@@ -257,7 +247,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 //                        view1.setPivotY(0);
 //                        view1.setPivotX(view1.getWidth()/2);
 //                        ObjectAnimator objAnim1 = MyRotateAnimator.createAnimatorX(view1, 0, -90);
-//                        ValueAnimator vAnim1 = ScaleAnimator.createAnimator(view1, view1.getHeight(),0 );
+//                        ValueAnimator vAnim1 = ExpandCollapseAnimator.createAnimator(view1, view1.getHeight(),0 );
 //                        AnimatorSet set1 = new AnimatorSet();
 //                        set1.playTogether(objAnim1, vAnim1);
 //                        set1.start();
@@ -267,14 +257,14 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 //                        view2.setPivotY(0);
 //                        view2.setPivotX(view2.getWidth()/2);
 //                        ObjectAnimator objAnim2 = MyRotateAnimator.createAnimatorX(view2, 0, -90);
-//                        ValueAnimator vAnim2 = ScaleAnimator.createAnimator(view2, view2.getHeight(),0 );
+//                        ValueAnimator vAnim2 = ExpandCollapseAnimator.createAnimator(view2, view2.getHeight(),0 );
 //                        AnimatorSet set2 = new AnimatorSet();
 //                        set2.playTogether(objAnim2, vAnim2);
 //                        set2.start();
 //
 //                    } else {
 //
-//                        ScaleAnimator.collapse(mFold);
+//                        ExpandCollapseAnimator.collapse(mFold);
 //                    }
 //
 //                    sCurrentVisibleFold = null;

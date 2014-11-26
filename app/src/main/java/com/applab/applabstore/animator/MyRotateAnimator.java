@@ -16,10 +16,10 @@ import com.applab.applabstore.R;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.herxun.library.singleton.StResol;
-
 /**
  * Created by TsaiKunYu on 25/11/2014.
+ *
+ * Aim for creating the folding and expand/collapse effect simultaneously.
  */
 public class MyRotateAnimator {
 
@@ -48,7 +48,7 @@ public class MyRotateAnimator {
                 });
             }
 
-            ValueAnimator vAnim = ScaleAnimator.createAnimator(v, v.getHeight(), 0);
+            ValueAnimator vAnim = ExpandCollapseAnimator.createAnimator(v, v.getHeight(), 0);
             list.add(objAnim);
             list.add(vAnim);
         }
@@ -97,7 +97,7 @@ public class MyRotateAnimator {
                 });
             }
 
-            ValueAnimator vAnim = ScaleAnimator.createAnimator(v, 0, childHeightPx);
+            ValueAnimator vAnim = ExpandCollapseAnimator.createAnimator(v, 0, childHeightPx);
             list.add(objAnim);
             list.add(vAnim);
         }

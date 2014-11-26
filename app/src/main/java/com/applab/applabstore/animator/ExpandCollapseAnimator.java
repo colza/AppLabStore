@@ -9,8 +9,9 @@ import com.applab.applabstore.MyConstants;
 
 /**
  * Created by TsaiKunYu on 25/11/2014.
+ *
  */
-public class ScaleAnimator {
+public class ExpandCollapseAnimator {
 
     public static void expand(final View rootView, int originHeight) {
         rootView.setVisibility(View.VISIBLE);

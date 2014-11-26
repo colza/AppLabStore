@@ -23,6 +23,7 @@ import co.herxun.library.singleton.StResol;
 
 /**
  * Created by TsaiKunYu on 25/11/2014.
+ * Adapter of the listView in MyActivity
  */
 public class AdapterAppType extends BaseAdapter{
 

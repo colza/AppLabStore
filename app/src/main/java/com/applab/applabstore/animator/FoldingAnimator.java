@@ -14,6 +14,10 @@ import com.ptr.folding.FoldingLayout;
 
 /**
  * Created by TsaiKunYu on 25/11/2014.
+ *
+ * Not used.
+ *
+ * This is the animation used for the library "FoldingLayout"
  */
 public class FoldingAnimator {
     public static final int FOLD_ANIMATION_DURATION = 1000;
@@ -43,7 +47,7 @@ public class FoldingAnimator {
             }
         });
 
-        ValueAnimator anim2 = ScaleAnimator.createAnimator(rootView, 0, originHeight);
+        ValueAnimator anim2 = ExpandCollapseAnimator.createAnimator(rootView, 0, originHeight);
 
         AnimatorSet set = new AnimatorSet();
         set.playTogether(animator,anim2);
@@ -62,7 +66,7 @@ public class FoldingAnimator {
             }
         });
 
-        ValueAnimator anim2 = ScaleAnimator.createAnimator(rootView, rootView.getHeight(), 0);
+        ValueAnimator anim2 = ExpandCollapseAnimator.createAnimator(rootView, rootView.getHeight(), 0);
         AnimatorSet set = new AnimatorSet();
         set.playTogether(animator,anim2);
         set.start();

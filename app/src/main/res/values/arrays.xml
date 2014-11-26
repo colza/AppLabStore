@@ -31,5 +31,10 @@
         <item>Five, Give me Five! High Five!</item>
     </array>
 
+    <array name="entry_buttons">
+        <item>Pure Expand/Collapse Effect</item>
+        <item>Folding and Expand/Collapse Effect</item>
+    </array>
+
 
 </resources>
