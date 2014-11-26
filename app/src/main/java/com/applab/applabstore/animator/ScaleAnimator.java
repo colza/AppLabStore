@@ -15,10 +15,6 @@ public class ScaleAnimator {
     public static void expand(final View rootView, int originHeight) {
         rootView.setVisibility(View.VISIBLE);
 
-        final int widthSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        final int heightSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-
-        rootView.measure(widthSpec, heightSpec);
         ValueAnimator anim = createAnimator(rootView, 0, originHeight);
         anim.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -38,6 +34,10 @@ public class ScaleAnimator {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 rootView.setVisibility(View.GONE);
+
+                rootView.getLayoutParams().height = -2;
+                rootView.requestLayout();
+
             }
         });
 

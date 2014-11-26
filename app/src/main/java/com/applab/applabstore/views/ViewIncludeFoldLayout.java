@@ -8,6 +8,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.applab.applabstore.Models.ModelAppType;
 import com.applab.applabstore.MyActivity;
+import com.applab.applabstore.MyConstants;
 import com.applab.applabstore.R;
 import com.applab.applabstore.adapter.AdapterAppType;
 import com.applab.applabstore.animator.FoldingAnimator;
@@ -127,7 +129,9 @@ public class ViewIncludeFoldLayout extends LinearLayout {
             setOrientation(VERTICAL);
 
             for (int i = 0; i < name.length; i++) {
-                TextView tv = rel.mUI.mTv.textInit(context, 20, Color.BLACK, null, rel.id++, name[i]);
+                TextView tv = rel.mUI.mTv.textInit(context, 35, Color.BLACK, null, rel.id++, name[i]);
+                tv.setGravity(Gravity.CENTER_VERTICAL);
+                tv.setPadding(20,0,0,0);
                 tv.setBackgroundColor(Color.WHITE);
                 addView(tv, rel.mUI.mLayout.linParam(-1, originHeight));
             }
@@ -147,36 +151,60 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                 int height = StResol.getInstance(view.getContext()).mResolK.szPDtoPC(originHeight) * count;
 
                 final ViewGroup vg = mMyLin;
+                vg.clearAnimation();
 //                ViewGroup vg = mAppListView;
                 if (vg.getVisibility() == View.GONE ) {
                     Log.i("LOG", "expand");
 
                     // try use folding layout again, see how it goes.
 
-                    if (MyActivity.sIsFoldingEffect) {
-                        // Use folding effect
-                        MyRotateAnimator.expand(vg, mRel.mResolK.szPDtoPC(originHeight));
-                        if( sCurrentVisibleFold != null && sCurrentVisibleFold != vg){
-                            MyRotateAnimator.collapse((ViewGroup)sCurrentVisibleFold);
-                        }
-                    } else {
+                    switch(MyConstants.sExpandType){
+                        case MyConstants.FoldExpand:
+                            MyRotateAnimator.expand(vg, mRel.mResolK.szPDtoPC(originHeight));
+                            if( sCurrentVisibleFold != null && sCurrentVisibleFold != vg){
+                                MyRotateAnimator.collapse((ViewGroup)sCurrentVisibleFold);
+                            }
+                            break;
+                        case MyConstants.ScaleExpand:
+                            if (sCurrentVisibleFold != null && sCurrentVisibleFold != vg) {
+                                ScaleAnimator.collapse(sCurrentVisibleFold);
+                            }
+                            ScaleAnimator.expand(vg, height);
 
-                        if (sCurrentVisibleFold != null && sCurrentVisibleFold != vg) {
-                            ScaleAnimator.collapse(sCurrentVisibleFold);
-                        }
-
-                        ScaleAnimator.expand(vg, height);
+                            break;
                     }
+//                    if (MyActivity.sIsFoldingEffect) {
+//                        // Use folding effect
+//                        MyRotateAnimator.expand(vg, mRel.mResolK.szPDtoPC(originHeight));
+//                        if( sCurrentVisibleFold != null && sCurrentVisibleFold != vg){
+//                            MyRotateAnimator.collapse((ViewGroup)sCurrentVisibleFold);
+//                        }
+//                    } else {
+//
+//                        if (sCurrentVisibleFold != null && sCurrentVisibleFold != vg) {
+//                            ScaleAnimator.collapse(sCurrentVisibleFold);
+//                        }
+//
+//                        ScaleAnimator.expand(vg, height);
+//                    }
 
                     sCurrentVisibleFold = vg;
                 } else {
-                    Log.i("LOG", "collapse");
-                    if (MyActivity.sIsFoldingEffect) {
-                        MyRotateAnimator.collapse(vg);
-//                        FoldingAnimator.collapseFold(vg);
-                    } else {
-                        ScaleAnimator.collapse(vg);
+                    switch(MyConstants.sExpandType){
+                        case MyConstants.FoldExpand:
+                            MyRotateAnimator.collapse(vg);
+                            break;
+                        case MyConstants.ScaleExpand:
+                            ScaleAnimator.collapse(vg);
+                            break;
                     }
+
+//                    Log.i("LOG", "collapse");
+//                    if (MyActivity.sIsFoldingEffect) {
+//                        MyRotateAnimator.collapse(vg);
+//                    } else {
+//                        ScaleAnimator.collapse(vg);
+//                    }
                     sCurrentVisibleFold = null;
                 }
 

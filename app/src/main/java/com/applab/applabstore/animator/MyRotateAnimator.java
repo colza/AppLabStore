@@ -15,6 +15,8 @@ import com.applab.applabstore.MyConstants;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.herxun.library.singleton.StResol;
+
 /**
  * Created by TsaiKunYu on 25/11/2014.
  */
@@ -33,7 +35,6 @@ public class MyRotateAnimator {
                 objAnim = MyRotateAnimator.createAnimatorX(v, 0, -90);
             } else {
                 //odd
-//                                v.setPivotY(v.getHeight());
                 v.setPivotY(0);
                 objAnim = MyRotateAnimator.createAnimatorX(v, 0, 90);
             }
