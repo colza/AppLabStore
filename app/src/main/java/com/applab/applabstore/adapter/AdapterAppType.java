@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.applab.applabstore.Models.ModelAppType;
 import com.applab.applabstore.views.ViewIncludeFoldLayout;
-import com.ptr.folding.FoldingLayout;
 
 import java.util.ArrayList;
 import java.util.List;
