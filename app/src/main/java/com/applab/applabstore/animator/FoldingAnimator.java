@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 
+import com.applab.applabstore.MyConstants;
 import com.ptr.folding.FoldingLayout;
 
 /**
@@ -60,12 +61,16 @@ public class FoldingAnimator {
                 rootView.setVisibility(View.GONE);
             }
         });
-        animator.start();
+
+        ValueAnimator anim2 = ScaleAnimator.createAnimator(rootView, rootView.getHeight(), 0);
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(animator,anim2);
+        set.start();
     }
 
     public static ObjectAnimator createFoldAnimator(final View rootView, float start, float end) {
         ObjectAnimator anim = ObjectAnimator.ofFloat(rootView, "foldFactor", start, end);
-        anim.setDuration(FOLD_ANIMATION_DURATION);
+        anim.setDuration(MyConstants.ANIMATION_DURATION);
         anim.setInterpolator(new AccelerateInterpolator());
         return anim;
     }

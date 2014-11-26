@@ -151,6 +151,8 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                 if (vg.getVisibility() == View.GONE ) {
                     Log.i("LOG", "expand");
 
+                    // try use folding layout again, see how it goes.
+
                     if (MyActivity.sIsFoldingEffect) {
                         // Use folding effect
                         MyRotateAnimator.expand(vg, mRel.mResolK.szPDtoPC(originHeight));
@@ -167,22 +169,15 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                     }
 
                     sCurrentVisibleFold = vg;
-//                        collapseFold(mFold);
-//                        expand(mFold);
-//                    expandFold(mFold);
-//                        animateFold(mFold, 1000);
                 } else {
                     Log.i("LOG", "collapse");
                     if (MyActivity.sIsFoldingEffect) {
                         MyRotateAnimator.collapse(vg);
+//                        FoldingAnimator.collapseFold(vg);
                     } else {
                         ScaleAnimator.collapse(vg);
                     }
                     sCurrentVisibleFold = null;
-//                    collapseFold(mFold);
-//                        collapse(mFold);
-//                        collapse(mFold);
-//                        animateFold(mFold, 1000);
                 }
 
             }
