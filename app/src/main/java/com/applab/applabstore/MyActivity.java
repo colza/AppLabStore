@@ -92,7 +92,7 @@ public class MyActivity extends Activity {
 //        }
 //
 //        ((MyAdapter) listView.getAdapter()).applyDataToList(list);
-        setContentView(new AppType(this));
+//        setContentView(new AppType(this));
 
 //        ViewIncludeFoldLayout view = new ViewIncludeFoldLayout(this);
 //        ModelAppType data = new ModelAppType();
@@ -190,6 +190,13 @@ public class MyActivity extends Activity {
             rel.addView(mTitle, stR.mUI.mLayout.relParam(-2, -2, new int[]{RIGHT_OF, mImgOnLeft.getId(), CENTER_VERTICAL}));
 
 
+//            mImgOnLeft.setOnClickListener(new OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    collapseFold2(mFold);
+//                }
+//            });
+
             mTitle.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -197,23 +204,30 @@ public class MyActivity extends Activity {
 //                    mFold.animate().rotationXBy(90).rotationX(0).scaleY(1.5f);
 
                     mFold.setPivotY(0);
+                    mFold.setPivotX(mFold.getWidth()/2);
                     ObjectAnimator anim = MyRotateAnimator.createAnimatorX(mFold, 0, -90);
-                    anim.start();
-
-//                    ValueAnimator anim2 = createAnimator(mFold, mFold.getHeight(), 0);
-//                    AnimatorSet set = new AnimatorSet();
-//                    set.playTogether(anim, anim2);
-//                    set.start();
+                    ValueAnimator anim2 = createAnimator(mFold, mFold.getHeight(), 0);
+                    anim.setInterpolator(new AccelerateInterpolator());
+                    anim.setDuration(3000);
+                    anim2.setDuration(3000);
+                    AnimatorSet set = new AnimatorSet();
+                    set.playTogether(anim, anim2);
+                    set.start();
 
 //                    secView.setPivotX(secView.getHeight());
                     int h = secView.getHeight();
-                    Log.i("LOG","height = " + h);
-                    secView.setPivotY(secView.getHeight());
+                    Log.i("LOG", "height = " + h);
+//                    secView.setPivotY(secView.getHeight());
+                    secView.setPivotY(h);
+                    secView.setPivotX(secView.getWidth()/2);
                     ObjectAnimator animSec = MyRotateAnimator.createAnimatorX(secView, 0, 90);
                     ValueAnimator animSec2 = createAnimator(secView, secView.getHeight(), 0);
+                    animSec2.setInterpolator(new AccelerateInterpolator());
+                    animSec.setDuration(3000);
+                    animSec2.setDuration(3000);
                     AnimatorSet set2 = new AnimatorSet();
                     set2.playTogether(animSec, animSec2);
-//                    set2.start();
+                    set2.start();
                 }
             });
 //
@@ -288,8 +302,9 @@ public class MyActivity extends Activity {
 //            mFold.addView(new MyListView(context));
             mFold.addView(lin);
             mFold.setId(stR.id++);
-            mFold.setBackgroundColor(Color.YELLOW);
+//            mFold.setBackgroundColor(Color.YELLOW);
             addView(mFold, stR.mUI.mLayout.relParam(-1, 300, new int[]{BELOW, rel.getId()}));
+            mFold.setBackgroundResource(R.drawable.border4_thumbs);
 //            mFold.setBackgroundColor(Color.GREEN);
 
 //            mFakeBgView = new View(context);
@@ -299,12 +314,13 @@ public class MyActivity extends Activity {
 
             secView = new LinearLayout(context);
             secView.setId(stR.id++);
-            secView.setBackgroundColor(Color.BLUE);
+            secView.setBackgroundResource(R.drawable.border4_thumbs);
+//            secView.setBackgroundColor(Color.BLUE);
             secView.setOrientation(LinearLayout.VERTICAL);
 
             ImageView img = new ImageView(context);
             img.setImageResource(R.drawable.ic_launcher);
-            img.setBackgroundColor(Color.GREEN);
+//            img.setBackgroundColor(Color.GREEN);
             secView.addView(img, stR.mUI.mLayout.linParam(100,100));
 
             TextView ch3 = new TextView(context);
@@ -355,6 +371,15 @@ public class MyActivity extends Activity {
             }
         });
         animator.start();
+    }
+
+    public void collapseFold2(final FoldingLayout rootView){
+        ObjectAnimator animator = createFoldAnimator(rootView, rootView.getFoldFactor(), 1.0f);
+        animator.start();
+//        ValueAnimator anim = createAnimator(rootView, rootView.getHeight(), 0);
+//        AnimatorSet set = new AnimatorSet();
+//        set.playTogether(animator, anim);
+//        set.start();
     }
 
     public void collapseFold(final FoldingLayout rootView) {

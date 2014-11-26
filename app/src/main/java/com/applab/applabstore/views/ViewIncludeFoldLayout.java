@@ -1,5 +1,8 @@
 package com.applab.applabstore.views;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
@@ -16,6 +19,7 @@ import com.applab.applabstore.MyActivity;
 import com.applab.applabstore.R;
 import com.applab.applabstore.adapter.AdapterAppType;
 import com.applab.applabstore.animator.FoldingAnimator;
+import com.applab.applabstore.animator.MyRotateAnimator;
 import com.applab.applabstore.animator.ScaleAnimator;
 import com.ptr.folding.BaseFoldingLayout;
 import com.ptr.folding.FoldingLayout;
@@ -35,6 +39,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
     public ViewAppType mHeadView;
     public FoldingLayout mFold;
     private AppListView mAppListView;
+    private MyLinear mMyLin;
     private StResol mRel;
 
     public ViewIncludeFoldLayout(Context context) {
@@ -46,6 +51,8 @@ public class ViewIncludeFoldLayout extends LinearLayout {
         mHeadView.setId(mRel.id++);
 
         mFold = new FoldingLayout(context);
+
+        mMyLin = new MyLinear(context, new String[]{"One","Two","Three"});
         mAppListView = new AppListView(context);
 
 //        ImageView view = new ImageView(context);
@@ -53,7 +60,8 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 //        view.setBackgroundColor(Color.BLUE);
 //        mFold.addView(view);
         mFold.setOrientation(BaseFoldingLayout.Orientation.VERTICAL);
-        mFold.addView(mAppListView);
+//        mFold.addView(mAppListView);
+        mFold.addView(mMyLin);
 
         addView(mHeadView);
 
@@ -61,6 +69,18 @@ public class ViewIncludeFoldLayout extends LinearLayout {
         addView(mFold, mRel.mUI.mLayout.linParam(-1, 0));
     }
 
+    public class MyLinear extends LinearLayout{
+
+        public MyLinear(Context context, String[] name) {
+            super(context);
+            StResol rel = StResol.getInstance(context);
+            setOrientation(VERTICAL);
+            for(int i = 0; i < name.length; i++ ){
+                TextView tv = rel.mUI.mTv.textInit(context, 20,Color.BLACK,null,rel.id++,name[i]);
+                addView(tv, rel.mUI.mLayout.linParam(-1,100));
+            }
+        }
+    }
     public void setData(ModelAppType data) {
         mHeadView.setData(data);
 //        mAppListView.refreshList(data.appListStr);
@@ -69,15 +89,26 @@ public class ViewIncludeFoldLayout extends LinearLayout {
             @Override
             public void onClick(View view) {
 
-                int count = mAppListView.getAdapter().getCount();
+                int count = mMyLin.getChildCount();
+//                int count = mAppListView.getAdapter().getCount();
                 int height = StResol.getInstance(view.getContext()).mResolK.szPDtoPC(100) * count;
 
                 if (mFold.getVisibility() == View.GONE) {
                     Log.i("LOG", "expand");
 
                     if (MyActivity.sIsFoldingEffect) {
-                        mFold.getLayoutParams().height = height;
-                        FoldingAnimator.expandFold(mFold);
+//                        mFold.getLayoutParams().height = height;
+//                        FoldingAnimator.expandFold(mFold);
+//                        FoldingAnimator.expandFold(mFold, height);
+
+                        View view0 = mAppListView.getChildAt(0);
+                        view0.setPivotY(0);
+                        view0.setPivotX(view0.getWidth()/2);
+                        ObjectAnimator objAnim = MyRotateAnimator.createAnimatorX(view0, -90, 0);
+                        ValueAnimator vAnim = ScaleAnimator.createAnimator(view0, 0, view0.getHeight());
+                        AnimatorSet set = new AnimatorSet();
+                        set.playTogether(objAnim, vAnim);
+                        set.start();
 
                     } else {
 
@@ -96,8 +127,40 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                 } else {
                     Log.i("LOG", "collapse");
                     if (MyActivity.sIsFoldingEffect) {
-                        FoldingAnimator.collapseFold(mFold);
+
+//                        FoldingAnimator.collapseFold(mFold);
+                        View view0 = mAppListView.getChildAt(0);
+                        view0 = mMyLin.getChildAt(0);
+                        view0.setPivotY(0);
+                        view0.setPivotX(view0.getWidth()/2);
+                        ObjectAnimator objAnim = MyRotateAnimator.createAnimatorX(view0, 0, -90);
+                        ValueAnimator vAnim = ScaleAnimator.createAnimator(view0, view0.getHeight(),0 );
+                        AnimatorSet set = new AnimatorSet();
+                        set.playTogether(objAnim, vAnim);
+                        set.start();
+
+                        View view1 = mAppListView.getChildAt(1);
+                        view1 = mMyLin.getChildAt(1);
+                        view1.setPivotY(0);
+                        view1.setPivotX(view1.getWidth()/2);
+                        ObjectAnimator objAnim1 = MyRotateAnimator.createAnimatorX(view1, 0, -90);
+                        ValueAnimator vAnim1 = ScaleAnimator.createAnimator(view1, view1.getHeight(),0 );
+                        AnimatorSet set1 = new AnimatorSet();
+                        set1.playTogether(objAnim1, vAnim1);
+                        set1.start();
+
+                        View view2 = mAppListView.getChildAt(2);
+                        view2 = mMyLin.getChildAt(2);
+                        view2.setPivotY(0);
+                        view2.setPivotX(view2.getWidth()/2);
+                        ObjectAnimator objAnim2 = MyRotateAnimator.createAnimatorX(view2, 0, -90);
+                        ValueAnimator vAnim2 = ScaleAnimator.createAnimator(view2, view2.getHeight(),0 );
+                        AnimatorSet set2 = new AnimatorSet();
+                        set2.playTogether(objAnim2, vAnim2);
+                        set2.start();
+
                     } else {
+
                         ScaleAnimator.collapse(mFold);
                     }
 

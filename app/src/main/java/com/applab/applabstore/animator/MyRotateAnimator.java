@@ -15,7 +15,7 @@ public class MyRotateAnimator {
         ObjectAnimator anim = ObjectAnimator.ofFloat(rootView, "rotationY", startAng, endAng);
 
         anim.setDuration(1000);
-//        anim.setInterpolator(new AccelerateInterpolator());
+        anim.setInterpolator(new AccelerateInterpolator());
         return anim;
     }
 
@@ -24,25 +24,30 @@ public class MyRotateAnimator {
         ObjectAnimator anim = ObjectAnimator.ofFloat(rootView, "rotationX", startAng, endAng);
         anim.setDuration(1000);
         anim.setInterpolator(new AccelerateInterpolator());
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                float f = (Float) valueAnimator.getAnimatedValue();
-                if( f < 0 )
-                    f = -f;
-                Log.i("LOG", "anim Value = " + f);
 
-                double rad = Math.toRadians(f);
-                double res = Math.cos(rad);
-                Log.i("LOG","res = " + res);
-                double resH = height*res;
+//        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                updateLayout(valueAnimator, rootView, height);
+//            }
+//        });
 
-                rootView.getLayoutParams().height = (int)(resH);
-                rootView.requestLayout();
-
-            }
-        });
         return anim;
+    }
+
+    private static void updateLayout(ValueAnimator valueAnimator, View rootView, int originHeight){
+        float f = (Float) valueAnimator.getAnimatedValue();
+        if( f < 0 )
+            f = -f;
+        Log.i("LOG", "anim Value = " + f);
+
+        double rad = Math.toRadians(f);
+        double res = Math.cos(rad);
+        Log.i("LOG","res = " + res);
+        double resH = originHeight*res;
+
+        rootView.getLayoutParams().height = (int)(resH);
+        rootView.requestLayout();
     }
 
 }

@@ -2,6 +2,7 @@ package com.applab.applabstore.animator;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.util.Log;
@@ -27,8 +28,25 @@ public class FoldingAnimator {
                 rootView.setVisibility(View.VISIBLE);
             }
         });
-        
+
         animator.start();
+    }
+
+    public static void expandFold(final FoldingLayout rootView, int originHeight){
+        ObjectAnimator animator = createFoldAnimator(rootView, rootView.getFoldFactor(), 0);
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                rootView.setVisibility(View.VISIBLE);
+            }
+        });
+
+        ValueAnimator anim2 = ScaleAnimator.createAnimator(rootView, 0, originHeight);
+
+        AnimatorSet set = new AnimatorSet();
+        set.playTogether(animator,anim2);
+        set.start();
     }
 
 
