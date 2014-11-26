@@ -1,5 +1,6 @@
 package com.applab.applabstore.views;
 
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -37,7 +38,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
     private static View sCurrentVisibleFold;
 
     public ViewAppType mHeadView;
-//    public FoldingLayout mFold;
+    //    public FoldingLayout mFold;
     private AppListView mAppListView;
     private MyLinear mMyLin;
     private StResol mRel;
@@ -74,6 +75,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 
         mRel = StResol.getInstance(context);
         setOrientation(VERTICAL);
+        setBackgroundColor(Color.BLACK);
 
         mHeadView = new ViewAppType(context);
         mHeadView.setId(mRel.id++);
@@ -82,7 +84,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 
 //        mMyLin = new MyLinear(context, new String[]{"One","Two","Three"});
         mAppListView = new AppListView(context);
-
+        mAppListView.setVisibility(View.GONE);
 //        ImageView view = new ImageView(context);
 //        view.setImageResource(R.drawable.ic_launcher);
 //        view.setBackgroundColor(Color.BLUE);
@@ -93,21 +95,22 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 
         addView(mHeadView);
         addView(mAppListView);
+
 //        addView(mMyLin);
 
 //        mFold.setVisibility(View.GONE);
 //        addView(mFold, mRel.mUI.mLayout.linParam(-1, 0));
     }
 
-    public class MyLinear extends LinearLayout{
+    public class MyLinear extends LinearLayout {
 
         public MyLinear(Context context, String[] name) {
             super(context);
             StResol rel = StResol.getInstance(context);
             setOrientation(VERTICAL);
-            for(int i = 0; i < name.length; i++ ){
-                TextView tv = rel.mUI.mTv.textInit(context, 20,Color.BLACK,null,rel.id++,name[i]);
-                addView(tv, rel.mUI.mLayout.linParam(-1,100));
+            for (int i = 0; i < name.length; i++) {
+                TextView tv = rel.mUI.mTv.textInit(context, 20, Color.BLACK, null, rel.id++, name[i]);
+                addView(tv, rel.mUI.mLayout.linParam(-1, 100));
             }
         }
     }
@@ -128,17 +131,34 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                     Log.i("LOG", "expand");
 
                     if (MyActivity.sIsFoldingEffect) {
+                        // Use folding effect
+
 //                        mFold.getLayoutParams().height = height;
 //                        FoldingAnimator.expandFold(mFold);
 //                        FoldingAnimator.expandFold(mFold, height);
 
-                        View view0 = mAppListView.getChildAt(0);
-                        view0.setPivotY(0);
-                        view0.setPivotX(view0.getWidth()/2);
-                        ObjectAnimator objAnim = MyRotateAnimator.createAnimatorX(view0, -90, 0);
-                        ValueAnimator vAnim = ScaleAnimator.createAnimator(view0, 0, view0.getHeight());
                         AnimatorSet set = new AnimatorSet();
-                        set.playTogether(objAnim, vAnim);
+                        List<Animator> list = new ArrayList<Animator>();
+                        for (int i = 0; i < mAppListView.getCount(); i++) {
+                            View v = mAppListView.getChildAt(i);
+                            v.setPivotX(v.getWidth() / 2);
+                            ObjectAnimator objAnim;
+                            if (i % 2 == 0) {
+                                //even
+                                v.setPivotY(0);
+                                objAnim = MyRotateAnimator.createAnimatorX(v, -90, 0);
+                            } else {
+                                //odd
+                                v.setPivotY(v.getHeight());
+                                objAnim = MyRotateAnimator.createAnimatorX(v, 0, 90);
+                            }
+
+                            ValueAnimator vAnim = ScaleAnimator.createAnimator(v, 0, v.getHeight());
+                            list.add(objAnim);
+                            list.add(vAnim);
+                        }
+
+                        set.playTogether(list);
                         set.start();
 
                     } else {
@@ -159,36 +179,29 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                     Log.i("LOG", "collapse");
                     if (MyActivity.sIsFoldingEffect) {
 
-//                        FoldingAnimator.collapseFold(mFold);
-                        View view0 = mAppListView.getChildAt(0);
-                        view0 = mMyLin.getChildAt(0);
-                        view0.setPivotY(0);
-                        view0.setPivotX(view0.getWidth()/2);
-                        ObjectAnimator objAnim = MyRotateAnimator.createAnimatorX(view0, 0, -90);
-                        ValueAnimator vAnim = ScaleAnimator.createAnimator(view0, view0.getHeight(),0 );
                         AnimatorSet set = new AnimatorSet();
-                        set.playTogether(objAnim, vAnim);
+                        List<Animator> list = new ArrayList<Animator>();
+                        for (int i = 0; i < mAppListView.getCount(); i++) {
+                            View v = mAppListView.getChildAt(i);
+                            v.setPivotX(v.getWidth() / 2);
+                            ObjectAnimator objAnim;
+                            if (i % 2 == 0) {
+                                //even
+                                v.setPivotY(0);
+                                objAnim = MyRotateAnimator.createAnimatorX(v, 0, -90);
+                            } else {
+                                //odd
+                                v.setPivotY(v.getHeight());
+                                objAnim = MyRotateAnimator.createAnimatorX(v, 0, -90);
+                            }
+
+                            ValueAnimator vAnim = ScaleAnimator.createAnimator(v, 0, v.getHeight());
+                            list.add(objAnim);
+                            list.add(vAnim);
+                        }
+
+                        set.playTogether(list);
                         set.start();
-
-                        View view1 = mAppListView.getChildAt(1);
-                        view1 = mMyLin.getChildAt(1);
-                        view1.setPivotY(0);
-                        view1.setPivotX(view1.getWidth()/2);
-                        ObjectAnimator objAnim1 = MyRotateAnimator.createAnimatorX(view1, 0, -90);
-                        ValueAnimator vAnim1 = ScaleAnimator.createAnimator(view1, view1.getHeight(),0 );
-                        AnimatorSet set1 = new AnimatorSet();
-                        set1.playTogether(objAnim1, vAnim1);
-                        set1.start();
-
-                        View view2 = mAppListView.getChildAt(2);
-                        view2 = mMyLin.getChildAt(2);
-                        view2.setPivotY(0);
-                        view2.setPivotX(view2.getWidth()/2);
-                        ObjectAnimator objAnim2 = MyRotateAnimator.createAnimatorX(view2, 0, -90);
-                        ValueAnimator vAnim2 = ScaleAnimator.createAnimator(view2, view2.getHeight(),0 );
-                        AnimatorSet set2 = new AnimatorSet();
-                        set2.playTogether(objAnim2, vAnim2);
-                        set2.start();
 
                     } else {
 
@@ -328,6 +341,7 @@ public class ViewIncludeFoldLayout extends LinearLayout {
         public AppListView(Context context) {
             super(context);
 //            setOrientation(LinearLayout.VERTICAL);
+            setBackgroundColor(Color.WHITE);
             List<String> list = Arrays.asList(new String[]{"One", "Two", "Three"});
             setAdapter(new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, list));
         }

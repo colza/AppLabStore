@@ -65,7 +65,6 @@ public class MyActivity extends Activity {
         }
 
         ada.addListItem(listData);
-        ada.notifyDataSetChanged();
         setContentView(listView);
 
 //        LinearLayout lin = new LinearLayout(this);
