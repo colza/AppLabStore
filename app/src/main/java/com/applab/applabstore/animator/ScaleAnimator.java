@@ -5,6 +5,8 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.view.View;
 
+import com.applab.applabstore.MyConstants;
+
 /**
  * Created by TsaiKunYu on 25/11/2014.
  */
@@ -44,6 +46,7 @@ public class ScaleAnimator {
 
     public static ValueAnimator createAnimator(final View rootView, int start, int end) {
         ValueAnimator anim = ValueAnimator.ofInt(start, end);
+        anim.setDuration(MyConstants.ANIMATION_DURATION);
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
