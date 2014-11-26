@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 
 import com.applab.applabstore.MyConstants;
+import com.applab.applabstore.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +27,7 @@ public class MyRotateAnimator {
         AnimatorSet set = new AnimatorSet();
         List<Animator> list = new ArrayList<Animator>();
         for (int i = 0; i < vg.getChildCount(); i++) {
-            View v = vg.getChildAt(i);
+            final View v = vg.getChildAt(i);
             v.setPivotX(v.getWidth() / 2);
             ObjectAnimator objAnim;
             if (i % 2 == 0) {
@@ -35,8 +36,16 @@ public class MyRotateAnimator {
                 objAnim = MyRotateAnimator.createAnimatorX(v, 0, -90);
             } else {
                 //odd
-                v.setPivotY(0);
+                v.setPivotY(v.getHeight());
+                Log.i("LOG","Original Height = " + v.getHeight() );
                 objAnim = MyRotateAnimator.createAnimatorX(v, 0, 90);
+                objAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+
+                        v.setPivotY(v.getHeight());
+                    }
+                });
             }
 
             ValueAnimator vAnim = ScaleAnimator.createAnimator(v, v.getHeight(), 0);
@@ -46,19 +55,28 @@ public class MyRotateAnimator {
 
         set.addListener(new AnimatorListenerAdapter() {
             @Override
+            public void onAnimationStart(Animator animation) {
+                super.onAnimationStart(animation);
+                vg.setTag(R.id.is_anim_running, true);
+            }
+
+            @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 vg.setVisibility(View.GONE);
+                vg.setTag(R.id.is_anim_running, false);
             }
         });
         set.playTogether(list);
         set.start();
     }
+
+
     public static void expand(final ViewGroup vg , int childHeightPx){
         AnimatorSet set = new AnimatorSet();
         List<Animator> list = new ArrayList<Animator>();
         for (int i = 0; i < vg.getChildCount(); i++) {
-            View v = vg.getChildAt(i);
+            final View v = vg.getChildAt(i);
             v.setPivotX(v.getWidth() / 2);
             ObjectAnimator objAnim;
             if (i % 2 == 0) {
@@ -67,9 +85,16 @@ public class MyRotateAnimator {
                 objAnim = MyRotateAnimator.createAnimatorX(v, -90, 0);
             } else {
                 //odd
-//                                v.setPivotY(v.getHeight());
-                v.setPivotY(0);
+                Log.i("LOG","Expand Original Height = " + v.getHeight() );
+                v.setPivotY(childHeightPx);
                 objAnim = MyRotateAnimator.createAnimatorX(v, 90, 0);
+                objAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        v.setPivotY(v.getHeight());
+                        Log.i("LOG","Changing Height = " + v.getHeight() );
+                    }
+                });
             }
 
             ValueAnimator vAnim = ScaleAnimator.createAnimator(v, 0, childHeightPx);
@@ -82,6 +107,13 @@ public class MyRotateAnimator {
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
                 vg.setVisibility(View.VISIBLE);
+                vg.setTag(R.id.is_anim_running, true);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                vg.setTag(R.id.is_anim_running, false);
             }
         });
 

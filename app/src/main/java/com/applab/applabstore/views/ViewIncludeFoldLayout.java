@@ -151,18 +151,17 @@ public class ViewIncludeFoldLayout extends LinearLayout {
             @Override
             public void onClick(View view) {
 
+                if( mMyLin.getTag(R.id.is_anim_running) != null && (Boolean)mMyLin.getTag(R.id.is_anim_running)){
+                    return;
+                }
+
                 int count = mMyLin.getChildCount();
 //                int count = mAppListView.getAdapter().getCount();
                 int height = StResol.getInstance(view.getContext()).mResolK.szPDtoPC(originHeight) * count;
 
                 final ViewGroup vg = mMyLin;
                 vg.clearAnimation();
-//                ViewGroup vg = mAppListView;
                 if (vg.getVisibility() == View.GONE ) {
-                    Log.i("LOG", "expand");
-
-                    // try use folding layout again, see how it goes.
-
                     switch(MyConstants.sExpandType){
                         case MyConstants.FoldExpand:
                             MyRotateAnimator.expand(vg, mRel.mResolK.szPDtoPC(originHeight));
@@ -178,21 +177,6 @@ public class ViewIncludeFoldLayout extends LinearLayout {
 
                             break;
                     }
-//                    if (MyActivity.sIsFoldingEffect) {
-//                        // Use folding effect
-//                        MyRotateAnimator.expand(vg, mRel.mResolK.szPDtoPC(originHeight));
-//                        if( sCurrentVisibleFold != null && sCurrentVisibleFold != vg){
-//                            MyRotateAnimator.collapse((ViewGroup)sCurrentVisibleFold);
-//                        }
-//                    } else {
-//
-//                        if (sCurrentVisibleFold != null && sCurrentVisibleFold != vg) {
-//                            ScaleAnimator.collapse(sCurrentVisibleFold);
-//                        }
-//
-//                        ScaleAnimator.expand(vg, height);
-//                    }
-
                     sCurrentVisibleFold = vg;
                 } else {
                     switch(MyConstants.sExpandType){
@@ -203,13 +187,6 @@ public class ViewIncludeFoldLayout extends LinearLayout {
                             ScaleAnimator.collapse(vg);
                             break;
                     }
-
-//                    Log.i("LOG", "collapse");
-//                    if (MyActivity.sIsFoldingEffect) {
-//                        MyRotateAnimator.collapse(vg);
-//                    } else {
-//                        ScaleAnimator.collapse(vg);
-//                    }
                     sCurrentVisibleFold = null;
                 }
 
